@@ -29,27 +29,30 @@ public class SpawnerScript : MonoBehaviour
     {
         SpawnMoons();
         SpawnPTrash();
-        SpawnSatellites();
+        SpawnSatellites(); 
     }
 
-
+    // This structure is the same for the other methods, no need to comment again unless necessary.
     void SpawnMoons()
     {
         for (int i = 0; i < moonCount; i++)
         {
+            // Getting a random position around the planet to spawn the moon
             float dist = Random.Range(moonMinDist, moonMaxDist);
             float angle = (360f / moonCount) * i * Mathf.Deg2Rad;
-            Vector3 pos = new Vector3 (Mathf.Cos(angle) * dist, 3f, Mathf.Sin(angle) * dist);
+            Vector3 pos = new Vector3 (Mathf.Cos(angle) * dist, Random.Range(1f, 5f), Mathf.Sin(angle) * dist);
 
             GameObject moon = Instantiate(moonPrefab, pos, Random.rotation);
             moon.name = $"Moon_{i}";
 
+            // Using an orbiting script value cannot be random since orbit speed depends on distance
             var orbit = moon.GetComponent<ProceduralOrbit>() ?? moon.AddComponent<ProceduralOrbit>();
             orbit.target = planet;
             orbit.orbitAxis = Vector3.up;
-            orbit.orbitSpeed = Random.Range(20f, 60f);
-            orbit.useKeplerSpeed = true;
+            orbit.orbitSpeed = 40f;
+            orbit.useKeplerSpeed = true; // Explained in orbit script
 
+            // Using a rotation script, the value can be random here for the speed
             var rot = moon.GetComponent<SelfRotate>() ?? moon.AddComponent<SelfRotate>();
             rot.rotationAxis = new Vector3(Random.value, Random.value, Random.value);
             rot.speed = Random.Range(30f, 90f);
@@ -63,19 +66,27 @@ public class SpawnerScript : MonoBehaviour
     {
         for (int i = 0; i < lTrashCount; i++)
         {
-            float dist = Random.Range(0.5f, 1f);
+            // Using moons position to spawn Lunar trash
+            float dist = Random.Range(1f, 2f);
             float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-
-            Vector3 pos = moon.position + new Vector3(Mathf.Cos(angle) * dist, 0, Mathf.Sin(angle) * dist);
+            Vector3 o = new Vector3(Mathf.Cos(angle) * dist, Random.Range(0f, 3f), Mathf.Sin(angle) * dist);
+            Vector3 pos = moon.position + o;
 
             GameObject trash = Instantiate(lTrashPrefab, pos, Random.rotation);
             trash.name = $"LunarTrash_{moon.name}_{i}";
-            //trash.transform.SetParent(moon);
 
+            // Orbit needs to be calculated differently since its orbiting a moon, not a planet, which moves in space around a planet
             var orbit = trash.GetComponent<ProceduralOrbit>() ?? trash.AddComponent<ProceduralOrbit>();
             orbit.target = moon;
-            orbit.orbitAxis = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-            orbit.orbitSpeed = Random.Range(40f, 70f);
+            Vector3 toTrash = o.normalized;
+            Vector3 randomHint = Vector3.up;
+            if (Vector3.Angle(toTrash, randomHint) < 5f)
+            {
+                randomHint = Vector3.right;
+            }
+            Vector3 orbitAxis = Quaternion.AngleAxis(Random.Range(0f, 360f), toTrash) * Vector3.Cross(toTrash, randomHint).normalized;
+            orbit.orbitAxis = orbitAxis.normalized;
+            orbit.orbitSpeed = 40f;
             orbit.useKeplerSpeed = true;
 
             var rot = trash.GetComponent<SelfRotate>() ?? trash.AddComponent<SelfRotate>();
@@ -91,7 +102,7 @@ public class SpawnerScript : MonoBehaviour
         {
             float dist = Random.Range(trashMinDist, trashMaxDist);
             float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            Vector3 pos = new Vector3 (Mathf.Cos(angle) * dist, 0f, Mathf.Sin(angle) * dist);
+            Vector3 pos = new Vector3 (Mathf.Cos(angle) * dist, Random.Range(1f, 3f), Mathf.Sin(angle) * dist);
 
             GameObject trash = Instantiate(pTrashPrefab, pos, Random.rotation);
             trash.name = $"SpaceTrash_{i}";
@@ -99,7 +110,7 @@ public class SpawnerScript : MonoBehaviour
             var orbit = trash.GetComponent<ProceduralOrbit>() ?? trash.AddComponent<ProceduralOrbit>();
             orbit.target = planet;
             orbit.orbitAxis = Vector3.up;
-            orbit.orbitSpeed = Random.Range(20f, 50f);
+            orbit.orbitSpeed = 30f;
             orbit.useKeplerSpeed = true;
 
             var rot = trash.GetComponent<SelfRotate>() ?? trash.AddComponent<SelfRotate>();
@@ -111,6 +122,7 @@ public class SpawnerScript : MonoBehaviour
 
     void SpawnSatellites()
     {
+        // Axis that must be different from the y plane
         Vector3[] axes = {
             new Vector3(1f, 0.5f, 0f).normalized,
             new Vector3(0f, 0.5f, 1f).normalized
@@ -123,12 +135,11 @@ public class SpawnerScript : MonoBehaviour
 
             GameObject sat = Instantiate(satellitePrefab, pos, Random.rotation);
             sat.name = $"Satellite_{i}";
-            //sat.transform.SetParent(planet);
 
             var orbit = sat.GetComponent<ProceduralOrbit>() ?? sat.AddComponent<ProceduralOrbit>();
             orbit.target = planet;
             orbit.orbitAxis = axes[i];
-            orbit.orbitSpeed = Random.Range(15f, 35f);
+            orbit.orbitSpeed = 35f;
             orbit.useKeplerSpeed = true;
 
             var rot = sat.GetComponent<SelfRotate>() ?? sat.AddComponent<SelfRotate>();

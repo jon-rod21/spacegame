@@ -16,8 +16,7 @@ public class ProceduralOrbit : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if (target == null) return;
 
@@ -26,10 +25,10 @@ public class ProceduralOrbit : MonoBehaviour
         lastTargetPos = target.position;
 
         float dist = Vector3.Distance(transform.position, target.position);
+        // If kepler speed is enabled, then objects will revolve slower farther, faster closer.
         float speed = useKeplerSpeed ? orbitSpeed / Mathf.Sqrt(dist) : orbitSpeed;
 
         Quaternion rotation = Quaternion.AngleAxis(speed * Time.deltaTime, orbitAxis);
         transform.position = rotation * (transform.position - target.position) + target.position;
-        
     }
 }

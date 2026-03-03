@@ -17,9 +17,7 @@ public class CameraController : MonoBehaviour
     public float rearFOV = 100f;
     public KeyCode rearCameraKey = KeyCode.R;
 
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // Sets camera positions based on spaceship location
     void Start()
     {
         rearCamera.fieldOfView = rearFOV;
@@ -29,12 +27,11 @@ public class CameraController : MonoBehaviour
 
         followCamera.gameObject.SetActive(true);
         rearCamera.gameObject.SetActive(false);
-        
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Switch camera view if holding R
         if (Input.GetKeyDown(rearCameraKey))
         {
             followCamera.gameObject.SetActive(false);
@@ -47,6 +44,7 @@ public class CameraController : MonoBehaviour
         }
     }
     
+    // Uncessessary but added smooth camera follow
     void LateUpdate()
     {
         if (followCamera.gameObject.activeSelf)

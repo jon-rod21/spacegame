@@ -5,10 +5,9 @@ public class SelfRotate : MonoBehaviour
     public Vector3 rotationAxis = Vector3.up;
     public float speed = 45f;
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        transform.Rotate(rotationAxis * speed * Time.deltaTime, Space.Self);
+        transform.Rotate(rotationAxis * speed * Time.deltaTime);
         
     }
 }
