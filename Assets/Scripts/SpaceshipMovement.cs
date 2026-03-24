@@ -8,18 +8,29 @@ public class SpaceshipMovement : MonoBehaviour
     void Update()
     {
         // Forward and Back movement
-        float moveInput = Input.GetAxis("Vertical");
-        transform.Translate(Vector3.forward * moveInput * moveSpeed * Time.deltaTime);
+        //float moveInput = Input.GetAxis("Vertical");
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
 
-        // Turning left and right
-        float turnInput = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.up * turnInput * turnSpeed * Time.deltaTime);
+        float pitch = turnSpeed * Time.deltaTime * Input.GetAxis("Vertical");
+        float yaw = turnSpeed * Time.deltaTime * Input.GetAxis("Horizontal");
 
-        // Up and Down
-        float upDownInput = 0f;
-        if (Input.GetKey(KeyCode.E)) upDownInput = 1f;
-        if (Input.GetKey(KeyCode.Q)) upDownInput = -1f;
-        transform.Translate(Vector3.up * upDownInput * moveSpeed * Time.deltaTime, Space.World);
+        float rollInput = 0f;
+        if (Input.GetKey(KeyCode.E)) rollInput = 1f;
+        if (Input.GetKey(KeyCode.Q)) rollInput = -1f;
+
+        float roll = turnSpeed * Time.deltaTime * rollInput;
+        transform.Rotate(pitch, yaw, roll);
+
+
+//        // Turning left and right
+//        float turnInput = Input.GetAxis("Horizontal");
+//        transform.Rotate(Vector3.up * turnInput * turnSpeed * Time.deltaTime);
+//
+//        // Up and Down
+//        float upDownInput = 0f;
+//        if (Input.GetKey(KeyCode.E)) upDownInput = 1f;
+//        if (Input.GetKey(KeyCode.Q)) upDownInput = -1f;
+//        transform.Translate(Vector3.up * upDownInput * moveSpeed * Time.deltaTime, Space.World);
 
     }
 }
