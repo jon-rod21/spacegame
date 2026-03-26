@@ -52,6 +52,7 @@ public class CameraController : MonoBehaviour
             Vector3 desiredPos = spaceship.position + spaceship.TransformDirection(offset);
             followCamera.transform.position = Vector3.Lerp(followCamera.transform.position, desiredPos, smoothSpeed * Time.deltaTime);
             followCamera.transform.LookAt(spaceship.position);
+            followCamera.transform.rotation = spaceship.rotation;
         }
     }
 

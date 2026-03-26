@@ -151,7 +151,7 @@ MonoBehaviour:
   followCamera: {fileID: 330585545}
   rearCamera: {fileID: 2006651876}
   spaceship: {fileID: 290470011}
-  offset: {x: 0, y: 1, z: -2}
+  offset: {x: 0, y: 0, z: -2}
   smoothSpeed: 5
   rearFOV: 100
   rearCameraKey: 114
@@ -1239,6 +1239,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 983560801}
   maxHealth: 100
+  spaceship: {fileID: 290470011}
+  thrust: {fileID: 639975140}
+  thrustBoost: 30
+  spaceshipMovement: {fileID: 0}
+  boostedSpeed: 0
+  originalSpeed: 0
   scoreText: {fileID: 2003810173}
 --- !u!1 &1223159132
 GameObject:
@@ -1334,6 +1340,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   turnSpeed: 100
+--- !u!65 &1276951376
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276951370}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.24801847, y: 1.2907411, z: 0.6275483}
+  m_Center: {x: 0.00000046938658, y: 0.03551835, z: -0.10981917}
+--- !u!54 &1276951377
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276951370}
+  serializedVersion: 4
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1421614932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,7 +1442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3074682224449766090, guid: 7a31e90a948d0214886e215435296d1b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.9
       objectReference: {fileID: 0}
     - target: {fileID: 3074682224449766090, guid: 7a31e90a948d0214886e215435296d1b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1432,6 +1486,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2441135294061811824, guid: 7a31e90a948d0214886e215435296d1b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1276951373}
+    - targetCorrespondingSourceObject: {fileID: 2441135294061811824, guid: 7a31e90a948d0214886e215435296d1b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1276951376}
+    - targetCorrespondingSourceObject: {fileID: 2441135294061811824, guid: 7a31e90a948d0214886e215435296d1b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1276951377}
   m_SourcePrefab: {fileID: 100100000, guid: 7a31e90a948d0214886e215435296d1b, type: 3}
 --- !u!1 &1733274326
 GameObject:
@@ -22645,7 +22705,7 @@ SphereCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
